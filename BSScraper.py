@@ -12,10 +12,18 @@ import dropbox
 import shutil
 
 
+# Status update after downloading the video from youtube
 def my_hook(d):
     if d['status'] == 'finished':
         print('Done downloading, now converting ...')
 
+'''
+ If image exists, return 1 and the url
+ If Video exists, return 2 and a dictionary containing the video_id and video_type (youtube/vimeo) as the keys 
+ with the video id and type as values
+ If there is nothing, return -1 and an empty string
+'''
+# Uncomment the commented lines in the function to check for images
 def getDetails(cdata):
     dict = {}
     for s in cdata.split(';'):
@@ -31,10 +39,13 @@ def getDetails(cdata):
                 for str in s.split("pitch_video:")[1].split('{', 1)[1].split('}', 1)[0].split(','):
                     if i > 0:
                         dict[str.split(':', 1)[0]] = str.split(':', 1)[1]
-                    i += 1
+                    i += 1  
                 return flag, dict
             return -1, ""
 
+'''
+ Returns alternate youtube video IDs 
+'''
 def getAltID(cdata, id):
     altID = []
     for s in cdata.split(';'):
@@ -48,6 +59,11 @@ def getAltID(cdata, id):
                         altID.append(vid_id)
 
     return altID
+
+'''
+ Downloads and saves image in .jpg format
+ If unsuccessful in saving the image, then the filename is logged for verification
+'''
 
 def downloadImg(ImgUrl, fileID):
     img = urllib.urlretrieve(ImgUrl, '/Volumes/Indie/Images/' + str(fileID) + ".jpg")
@@ -63,6 +79,10 @@ def downloadImg(ImgUrl, fileID):
         outputFile.close()
         return 0
 
+'''
+ Returns true if the youtube link is valid
+ Returns false if the youtube link is invalid
+'''
 def checkYTValidity(youtubeLink):
     youtube = etree.HTML(urllib.urlopen(youtubeLink).read())
     video_title = youtube.xpath("//span[@id='eow-title']/@title")
@@ -70,6 +90,12 @@ def checkYTValidity(youtubeLink):
         return True
     return False
 
+'''
+ Returns true if the vimeo link is valid
+ Returns false if the vimeo link is invalid
+ Data for excel sheet is recorded based on the validity of the vimeo link
+'''
+# Uncomment the commented line in the function to download images
 def checkVimeoValidity(vimeoLink, id, fileID):
     try:
         rowDets = []
@@ -90,6 +116,9 @@ def checkVimeoValidity(vimeoLink, id, fileID):
         wb.save("test.xlsx")
         return False
 
+'''
+ Fills in the excel sheet row with the recorded data
+'''
 def writeXLSX(rowDets, fileID):
     i = 0
     for row in ws.rows:
@@ -100,6 +129,9 @@ def writeXLSX(rowDets, fileID):
                 row[5].value = rowDets[2]
         i += 1
 
+'''
+ Uploads the file(s) in the given directory to dropbox.
+'''
 def dropboxUpload():
     videoPath = "/Volumes/Indie/Videos/"
     movePath = "/Volumes/Indie/Videos1/"
@@ -135,6 +167,9 @@ def dropboxUpload():
             else:
                 printLog(filename.encode('utf-8'))
 
+'''
+ Returns the ID of a filename from the excel sheet
+'''
 def getFileID(filename):
     i = 0
     fileID = ''
@@ -155,10 +190,14 @@ def getFileID(filename):
         i += 1
     return fileID
 
+'''
+ If there is a problem with the file, then the filename is logged for verification.
+'''
 def printLog(filename):
     outputFile = open("Log.txt", "a")
     outputFile.write(filename + "\n")
     outputFile.close()
+
 
 wb = load_workbook("test.xlsx")
 ws = wb.get_sheet_by_name("test")
@@ -166,7 +205,7 @@ path = "/Volumes/Indie/Webpages/"
 moveWPPath = "/Volumes/Indie/ThisWP/"
 for filename in os.listdir(path):
      fileID = ''
-     # if filename == "'Babylon vs. Zion' by The EyeDealists _ Indiegogo.html":
+     # Filter to process only html or htm files
      if (filename.endswith('.html') or filename.endswith('.htm')) and (not filename.startswith('._')):
         rowDets = []
         print filename
@@ -174,12 +213,14 @@ for filename in os.listdir(path):
         soup = BeautifulSoup(f, 'html.parser')
         f.close()
         fileID = getFileID(filename.rsplit('.', 1)[0])
-        print fileID
+        # All the pitch information is stored in CDATA. So, get that.
         cdatas = soup.findAll(text=re.compile("CDATA"))
         for cdata in cdatas:
             details = getDetails(cdata)
             if details != None:
                 break
+        # If the filename doesn't exist in the excel sheet or there is no image or video on the html page,
+        # log the filename for verification.
         if fileID == '' or details[0] == -1:
             printLog(filename)
             continue
@@ -187,6 +228,7 @@ for filename in os.listdir(path):
             rowDets.append(0)
             rowDets.append("NA")
             rowDets.append(1)
+            # Check if image exists or not
             if details[1] == "projects/missing/full.png":
                 rowDets.append(0)
             else:
@@ -198,6 +240,7 @@ for filename in os.listdir(path):
             wb.save("test.xlsx")
         else:
             if details[1].get('video_type') == 'youtube':
+                # set up options for the video to be downloaded. (video in .mp4 format, fileID as the name)
                 ydl_opts = {'format': 'best[ext=mp4]/best',
                             'outtmpl': '/Volumes/Indie/Videos/' + str(fileID) + '.%(ext)s',
                             'noplaylist': True,
@@ -208,6 +251,9 @@ for filename in os.listdir(path):
                     rowDets.append(1)
                     writeXLSX(rowDets, fileID)
                     wb.save("test.xlsx")
+                    # Start downloading the video using the obtained video id. In case of connection failures, retry 5
+                    # times before logging the filename for verification.
+                    # Uncomment the lines calling downloadImg method to download images
                     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                         try:
                             info_dict = ydl.extract_info("https://www.youtube.com/watch?v=" + details[1].get('video_id'))
@@ -227,6 +273,7 @@ for filename in os.listdir(path):
 
 
                 else:
+                    # Uncomment the following commented lines to get the alternate voutube ids and download the images.
                     rowDets.append(0)
                     rowDets.append('NA')
                     rowDets.append("NA")
@@ -243,6 +290,7 @@ for filename in os.listdir(path):
                 dropboxUpload()
             elif details[1].get('video_type') == 'vimeo':
                 checkVimeoValidity('http://vimeo.com/api/v2/video/' + details[1].get('video_id'), details[1].get('video_id'), fileID)
+     # Move the file out of the directory to some other directory.
      if (not filename.startswith('._')):
         shutil.move(path + filename, moveWPPath + filename)
 wb.save("test.xlsx")

@@ -18,6 +18,7 @@ The following conditions are applied to extract the information from the webpage
  
 #### Randomizer.py
 This is a small side project in the same Project. There is a CSV file that contains links to the campaigns on Indiegogo websites and the years when the campaigns started. These rows are sorted by the years.  
+
 This program randomizes the rows in the CSV file such that, while collecting information of these campaigns, there is no overrepresentation of campaigns from any specific year. For example, the first campaign can be from 2013, the next campaign would be from 2016.  
 
 #### Finder.py

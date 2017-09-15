@@ -1,15 +1,16 @@
 from __future__ import unicode_literals
-from bs4 import BeautifulSoup
-import re
 import os
-from PIL import Image
-from lxml import etree
-import urllib
-import youtube_dl
-import requests
 from openpyxl import load_workbook
-import dropbox
 import shutil
+
+#TODO Change the provided name to the name of your excel workbook.
+wb = load_workbook("test.xlsx")
+#TODO Change the provided name to the name of your excel sheet.
+ws = wb.get_sheet_by_name("test")
+#TODO Change the provided path to the path where you want to move the webpage once they are successfully processed.
+moveWPPath = "/Volumes/Indie/Webpages/"
+#TODO Change the provided path to the path where the webpages are saved.
+path = "/Volumes/Indie/Old WP/"
 
 def getFile(filename):
     i = 0
@@ -32,10 +33,7 @@ def getFile(filename):
         i += 1
     return fileID
 
-wb = load_workbook("test.xlsx")
-ws = wb.get_sheet_by_name("test")
-moveWPPath = "/Volumes/Indie/Webpages/"
-path = "/Volumes/Indie/Old WP/"
+
 
 for filename in os.listdir(path):
     if (filename.endswith('.html') or filename.endswith('.htm')) and (not filename.startswith('._')):

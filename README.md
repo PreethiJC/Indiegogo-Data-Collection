@@ -78,5 +78,12 @@ The program searches for html files that have the same name as the name in the 2
 ## Execution Issues
 If there is a problem in downloading a video, getting the File ID of a webpage, saving an image, or missing information, then the program saves the problem file's name in a file called Log.txt. You can go through these files manually to see what the problem is. 
 
+## Contributing
+1. Fork it!
+2. Create your feature branch: ```$ git checkout -b my-new-feature```
+3. Commit your changes: ```$ git commit -am 'Add some feature' ```
+4. Push to the branch: ```$ git push origin my-new-feature```
+5. Submit a pull request :D
+
 ## Author
 Preethi Chavely

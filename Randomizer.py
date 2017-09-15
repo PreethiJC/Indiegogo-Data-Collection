@@ -1,6 +1,7 @@
 import csv
 import random
 
+#TODO Change the provided path to the path where the csv file, whose rows have to be randomized, is stored.
 inputPath = "/Users/Zion/iCloud Drive (Archive)/Desktop/Desktop - Zion/Job/Indiegogo/IndiegogoMusicProjects.csv"
 outputPath = "randomVideo.csv"
 

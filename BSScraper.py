@@ -11,6 +11,20 @@ from openpyxl import load_workbook
 import dropbox
 import shutil
 
+#TODO Change the provided path to the path where the videos are saved.
+videoPath = "/Volumes/Indie/Videos/"
+#TODO Change the provided path to the path where you want to move the videos once they are successfully uploaded to DropBox.
+movePath = "/Volumes/Indie/VideoDemo/"
+#TODO Change the provided path to the path where you want to upload the videos on DropBox. This should be a DROPBOX location.
+target = "/Backups/IndiegogoVideos/"
+#TODO Change the provided path to the path where the webpages are saved.
+path = "/Volumes/Indie/Webpages/"
+#TODO Change the provided path to the path where you want to move the webpage once they are successfully processed.
+moveWPPath = "/Volumes/Indie/Demo/"
+#TODO Change the provided name to the name of your excel workbook.
+wb = load_workbook("Demo.xlsx")
+#TODO Change the provided name to the name of your excel sheet.
+ws = wb.get_sheet_by_name("test")
 
 # Status update after downloading the video from youtube
 def my_hook(d):
@@ -23,7 +37,7 @@ def my_hook(d):
  with the video id and type as values
  If there is nothing, return -1 and an empty string
 '''
-# Uncomment the commented lines in the function to check for images
+# TODO Uncomment the commented lines in the function to check for images
 def getDetails(cdata):
     dict = {}
     for s in cdata.split(';'):
@@ -66,6 +80,7 @@ def getAltID(cdata, id):
 '''
 
 def downloadImg(ImgUrl, fileID):
+    # TODO change the provided path here to the path where you want to save the image. Make sure that you change the path throughout this function
     img = urllib.urlretrieve(ImgUrl, '/Volumes/Indie/Images/' + str(fileID) + ".jpg")
     try:
         img1 = Image.open("/Volumes/Indie/Images/" + str(fileID) + ".jpg").convert('RGB').save("/Volumes/Indie/Images/" + str(fileID) + ".jpg")
@@ -95,7 +110,7 @@ def checkYTValidity(youtubeLink):
  Returns false if the vimeo link is invalid
  Data for excel sheet is recorded based on the validity of the vimeo link
 '''
-# Uncomment the commented line in the function to download images
+# TODO Uncomment the commented line in the function to download images
 def checkVimeoValidity(vimeoLink, id, fileID):
     try:
         rowDets = []
@@ -134,10 +149,8 @@ def writeXLSX(rowDets, fileID):
  Uploads the file(s) in the given directory to dropbox.
 '''
 def dropboxUpload():
-    videoPath = "/Volumes/Indie/Videos/"
-    movePath = "/Volumes/Indie/VideoDemo/"
-    target = "/Backups/IndiegogoVideos/"
-    d = dropbox.Dropbox('8BYWb6tlnCAAAAAAAAAGA5oSjys0t8wov3xCGvIUkQja8WK4XypWI_cAB88Fcgsu')
+    # TODO Use your access token here.
+    d = dropbox.Dropbox('your_access_token_goes here')
     for file in os.listdir(videoPath):
         if file != '.DS_Store':
             fn = file.rsplit('.', 1)[1]
@@ -176,7 +189,6 @@ def getFileID(filename):
     fileID = ''
     for row in ws.rows:
         if i > 0:
-            # print(row[1].value)
             r = str(row[1].value)
             if(r != None):
                 if " ".join(r
@@ -199,11 +211,6 @@ def printLog(filename):
     outputFile.write(filename + "\n")
     outputFile.close()
 
-
-wb = load_workbook("Demo.xlsx")
-ws = wb.get_sheet_by_name("test")
-path = "/Volumes/Indie/Webpages/"
-moveWPPath = "/Volumes/Indie/Demo/"
 for filename in os.listdir(path):
      # Filter to process only html or htm files
      if (filename.endswith('.html') or filename.endswith('.htm')) and (not filename.startswith('._')):
@@ -244,6 +251,7 @@ for filename in os.listdir(path):
         else:
             if details[1].get('video_type') == 'youtube':
                 # set up options for the video to be downloaded. (video in .mp4 format, fileID as the name)
+                # TODO Change the provided path in outtmpl to the path where you want to save the video.
                 ydl_opts = {'format': 'best[ext=mp4]/best',
                             'outtmpl': '/Volumes/Indie/Videos/' + str(fileID) + '.%(ext)s',
                             'noplaylist': True,
@@ -256,7 +264,7 @@ for filename in os.listdir(path):
                     wb.save("Demo.xlsx")
                     # Start downloading the video using the obtained video id. In case of connection failures, retry 5
                     # times before logging the filename for verification.
-                    # Uncomment the lines calling downloadImg method to download images
+                    # TODO Uncomment the lines calling downloadImg method to download images
                     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                         try:
                             info_dict = ydl.extract_info("https://www.youtube.com/watch?v=" + details[1].get('video_id'))
@@ -276,7 +284,7 @@ for filename in os.listdir(path):
 
 
                 else:
-                    # Uncomment the following commented lines to get the alternate voutube ids and download the images.
+                    # TODO Uncomment the following commented lines to get the alternate voutube ids and download the images.
                     rowDets.append(0)
                     rowDets.append('NA')
                     rowDets.append("NA")

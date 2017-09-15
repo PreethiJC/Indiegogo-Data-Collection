@@ -22,7 +22,7 @@ This is a small side project in the same Project. There is a CSV file that conta
 This program randomizes the rows in the CSV file such that, while collecting information of these campaigns, there is no overrepresentation of campaigns from any specific year. For example, the first campaign can be from 2013, the next campaign would be from 2016.  
 
 #### Finder.py
-This is also a small side project to help out the main Project. But this program does not impact the execution of BSScraper.py in any way.  
+This is also a small personal side project to help out the main Project. But this program does not impact the execution of BSScraper.py in any way.  
 
 The program searches for html files that have the same name as the name in the 2nd column of the excel sheet and moves them from one directory to another.
 

@@ -36,8 +36,10 @@ Install these libraries:
 * An excel sheet with the file id, project name, link to the project, <custom fields>
 * Saved Webpages in html or htm format. Ensure that the webpages have the same name as the project name in the excel sheet.
 
-## Installation
-Run the individual programs e.g.
+## Execution
+Run the individual programs.
+
+For example,
 
     $ python BSScraper.py 
 

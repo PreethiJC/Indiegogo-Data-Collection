@@ -10,27 +10,27 @@ Clone this repository.
 Install these libraries:
 * Beautiful Soup 4
   ```
-  pip install bs4
+  $ pip install bs4
   ```
 * Pillow
   ```
-  pip install Pillow
+  $ pip install Pillow
   ```
 * lxml
   ```
-  pip install lxml
+  $ pip install lxml
   ```
 * youtube-dl
   ```
-  pip install youtube_dl
+  $ pip install youtube_dl
   ```
 * openpyxl
   ```
-  pip install openpyxl
+  $ pip install openpyxl
   ```
 * dropbox
   ```
-  pip install dropbox
+  $ pip install dropbox
   ```
 ## Prerequisites
 * An excel sheet with the file id, project name, link to the project, <custom fields>

@@ -39,7 +39,7 @@ def getDetails(cdata):
                 for str in s.split("pitch_video:")[1].split('{', 1)[1].split('}', 1)[0].split(','):
                     if i > 0:
                         dict[str.split(':', 1)[0]] = str.split(':', 1)[1]
-                    i += 1  
+                    i += 1
                 return flag, dict
             return -1, ""
 
@@ -103,7 +103,7 @@ def checkVimeoValidity(vimeoLink, id, fileID):
         rowDets.append("http://vimeo.com/" + id)
         rowDets.append(0)
         writeXLSX(rowDets, fileID)
-        wb.save("test.xlsx")
+        wb.save("Demo.xlsx")
         data = requests.get(vimeoLink +'.json').json()
         # downloadImg(data[0]['thumbnail_large'], fileID)
         return True
@@ -113,7 +113,7 @@ def checkVimeoValidity(vimeoLink, id, fileID):
         rowDets.append("NA")
         rowDets.append("NA")
         writeXLSX(rowDets, fileID)
-        wb.save("test.xlsx")
+        wb.save("Demo.xlsx")
         return False
 
 '''
@@ -127,6 +127,7 @@ def writeXLSX(rowDets, fileID):
                 row[3].value = rowDets[0]
                 row[4].value = rowDets[1]
                 row[5].value = rowDets[2]
+                row[6].value = rowDets[3]
         i += 1
 
 '''
@@ -134,7 +135,7 @@ def writeXLSX(rowDets, fileID):
 '''
 def dropboxUpload():
     videoPath = "/Volumes/Indie/Videos/"
-    movePath = "/Volumes/Indie/Videos1/"
+    movePath = "/Volumes/Indie/VideoDemo/"
     target = "/Backups/IndiegogoVideos/"
     d = dropbox.Dropbox('8BYWb6tlnCAAAAAAAAAGA5oSjys0t8wov3xCGvIUkQja8WK4XypWI_cAB88Fcgsu')
     for file in os.listdir(videoPath):
@@ -199,14 +200,14 @@ def printLog(filename):
     outputFile.close()
 
 
-wb = load_workbook("test.xlsx")
+wb = load_workbook("Demo.xlsx")
 ws = wb.get_sheet_by_name("test")
 path = "/Volumes/Indie/Webpages/"
-moveWPPath = "/Volumes/Indie/ThisWP/"
+moveWPPath = "/Volumes/Indie/Demo/"
 for filename in os.listdir(path):
-     fileID = ''
      # Filter to process only html or htm files
      if (filename.endswith('.html') or filename.endswith('.htm')) and (not filename.startswith('._')):
+        
         rowDets = []
         print filename
         f = open(path+filename)
@@ -225,9 +226,11 @@ for filename in os.listdir(path):
             printLog(filename)
             continue
         if(details[0] == 1):
+
             rowDets.append(0)
             rowDets.append("NA")
             rowDets.append(1)
+            rowDets.append(0)
             # Check if image exists or not
             if details[1] == "projects/missing/full.png":
                 rowDets.append(0)
@@ -237,7 +240,7 @@ for filename in os.listdir(path):
             rowDets.append("NA")
             rowDets.append("NA")
             writeXLSX(rowDets, fileID)
-            wb.save("test.xlsx")
+            wb.save("Demo.xlsx")
         else:
             if details[1].get('video_type') == 'youtube':
                 # set up options for the video to be downloaded. (video in .mp4 format, fileID as the name)
@@ -250,7 +253,7 @@ for filename in os.listdir(path):
                     rowDets.append("https://youtu.be/" + details[1].get('video_id'))
                     rowDets.append(1)
                     writeXLSX(rowDets, fileID)
-                    wb.save("test.xlsx")
+                    wb.save("Demo.xlsx")
                     # Start downloading the video using the obtained video id. In case of connection failures, retry 5
                     # times before logging the filename for verification.
                     # Uncomment the lines calling downloadImg method to download images
@@ -278,7 +281,7 @@ for filename in os.listdir(path):
                     rowDets.append('NA')
                     rowDets.append("NA")
                     writeXLSX(rowDets, fileID)
-                    wb.save("test.xlsx")
+                    wb.save("Demo.xlsx")
                     # altID = getAltID(cdata, details[1].get('video_id'))
                     # if altID:
                     #     for id in altID:
@@ -293,7 +296,7 @@ for filename in os.listdir(path):
      # Move the file out of the directory to some other directory.
      if (not filename.startswith('._')):
         shutil.move(path + filename, moveWPPath + filename)
-wb.save("test.xlsx")
+wb.save("Demo.xlsx")
 
 
 

@@ -28,35 +28,39 @@ The program searches for html files that have the same name as the name in the 2
 
 ## Getting Started
 
-Clone this repository.
+* Clone this repository.
+  ```
+  $ git clone https://github.com/PreethiJC/Indiegogo-Data-Collection.git
+  ```
 
-    $ git clone https://github.com/PreethiJC/Indiegogo-Data-Collection.git
+* Install these libraries:
+  * Beautiful Soup 4
+    ```
+    $ pip install bs4
+    ```
+  * Pillow
+    ```
+    $ pip install Pillow
+    ```
+  * lxml
+    ```
+    $ pip install lxml
+    ```
+  * youtube-dl
+    ```
+    $ pip install youtube_dl
+    ```
+  * openpyxl
+    ```
+    $ pip install openpyxl
+    ```
+  * dropbox
+    ```
+    $ pip install dropbox
+    ```
 
-Install these libraries:
-* Beautiful Soup 4
-  ```
-  $ pip install bs4
-  ```
-* Pillow
-  ```
-  $ pip install Pillow
-  ```
-* lxml
-  ```
-  $ pip install lxml
-  ```
-* youtube-dl
-  ```
-  $ pip install youtube_dl
-  ```
-* openpyxl
-  ```
-  $ pip install openpyxl
-  ```
-* dropbox
-  ```
-  $ pip install dropbox
-  ```
+* To use the Dropbox API, you'll need to register a new app in the App Console. Follow the instructions [here](https://blogs.dropbox.com/developers/2014/05/generate-an-access-token-for-your-own-account/) to generate your access token.
+
 ## Prerequisites
 * An excel sheet with the file id, project name, link to the project, <custom fields>
 * Saved Webpages in html or htm format. Ensure that the webpages have the same name as the project name in the excel sheet.  

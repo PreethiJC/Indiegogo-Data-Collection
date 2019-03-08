@@ -1,5 +1,10 @@
 # Indiegogo-Data-Collection
-Offline Scraping for Indiegogo website
+
+## Overview
+
+Offline Scraping for Indiegogo website to collect data, such as videos and images used in a campaign, to predict the success rate of that music campaign. 
+
+## Design
 
 #### BSScraper.py
 The purpose of this program is to scrape the data from the webpages stored offline. It collects the video information and image information and fills an excel sheet with values pertaining to the image and video. For example, Does the video exist?, Video URL, Does the image exist?, Is it Vimeo video or YouTube video?, etc.
